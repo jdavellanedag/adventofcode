@@ -1,4 +1,5 @@
 use std::fs::read_to_string;
+use itertools::Itertools;
 
 // Disclaimer, this is a ugly piece of code, I'm trying to learn tmux + vim + rust at the same time
 fn main() {
@@ -7,23 +8,19 @@ fn main() {
         panic!("Failed to read input file: {}", err);
     });
     
-    let mut sum: u64 = 0;
-    let mut total = Vec::new();
-
-    for line in data {
-        if !line.is_empty() {
-            match line.parse::<u64>() {
-                Ok(value) => sum += value,
-                Err(err) => {
-                    panic!("FAiled to parse line as u64: {}", err);
-                },
+    let total = data
+        .into_iter()
+        .group_by(|line| !line.is_empty())
+        .into_iter()
+        .filter_map(|(is_value, lines)| {
+            if is_value {
+                Some(lines.filter_map(|line| line.parse::<u64>().ok()).sum())
+            } else {
+                None
             }
-        } else {
-            total.push(sum);
-            sum = 0;
-        }
-    }
-    total.push(sum); // This push the last element, could be better :)
+        })
+        .collect::<Vec<u64>>();
+
     if let Some(max_value) = total.iter().max() {
         println!("Elfe with more food has {} total calories", max_value);
     } else {
