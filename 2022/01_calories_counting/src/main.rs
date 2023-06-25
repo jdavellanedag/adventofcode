@@ -23,11 +23,15 @@ fn main() {
 
     total.sort();
     
-    // let n = 3;
-    // let total_elves = total.len().saturating_sub(n);
+    if let Some(max_value) = total.iter().max() {
+        println!("Elfe with more food has {} total calories", max_value);
+    } else {
+        println!("No data found");
+    }
+
     let highest_calories = total.split_off(total.len() - 3);
     
-    println!("Result: {}", highest_calories.iter().sum::<u64>());
+    println!("Total of calories top 3 elves: {}", highest_calories.iter().sum::<u64>());
 
 }
 
