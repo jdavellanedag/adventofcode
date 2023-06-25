@@ -11,16 +11,25 @@ fn main() {
     let mut total = Vec::new();
 
     for line in data {
-        if !line.trim().is_empty() {
-            sum += &line.parse::<u64>().unwrap();
+        if !line.is_empty() {
+            match line.parse::<u64>() {
+                Ok(value) => sum += value,
+                Err(err) => {
+                    panic!("FAiled to parse line as u64: {}", err);
+                },
+            }
         } else {
-            total.push(sum.clone());
+            total.push(sum);
             sum = 0;
         }
     }
-    total.push(sum.clone()); // This push the last element, could be better :)
+    total.push(sum); // This push the last element, could be better :)
+    if let Some(max_value) = total.iter().max() {
+        println!("Elfe with more food has {} total calories", max_value);
+    } else {
+        println!("No data found");
+    }
 
-    println!("Elfe with more food is: {}", total.iter().max().unwrap());
 }
 
 fn read_lines(filename: &str) -> Result<Vec<String>, std::io::Error> {
