@@ -8,7 +8,7 @@ fn main() {
         panic!("Failed to read input file: {}", err);
     });
     
-    let total = data
+    let mut total = data
         .into_iter()
         .group_by(|line| !line.is_empty())
         .into_iter()
@@ -21,11 +21,13 @@ fn main() {
         })
         .collect::<Vec<u64>>();
 
-    if let Some(max_value) = total.iter().max() {
-        println!("Elfe with more food has {} total calories", max_value);
-    } else {
-        println!("No data found");
-    }
+    total.sort();
+    
+    // let n = 3;
+    // let total_elves = total.len().saturating_sub(n);
+    let highest_calories = total.split_off(total.len() - 3);
+    
+    println!("Result: {}", highest_calories.iter().sum::<u64>());
 
 }
 
