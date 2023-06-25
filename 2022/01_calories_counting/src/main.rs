@@ -5,21 +5,19 @@ fn main() {
     let data = read_lines("./input.txt");
 
     let mut sum: u64 = 0;
-    let mut totals = Vec::new();
+    let mut total = Vec::new();
 
     for line in data {
         if !line.trim().is_empty() {
             sum += &line.parse::<u64>().unwrap();
-            println!("Value {} after sum: {}", &line, &sum);
         } else {
-            println!("Found an space, total so far: {}", &sum);
-            totals.push(sum.clone());
+            total.push(sum.clone());
             sum = 0;
-            // TODO: Last value is been skipped, fix this stupid
         }
     }
+    total.push(sum.clone()); // This push the last element, could be better :)
 
-    println!("Elfe with more food is: {}", totals.iter().max().unwrap());
+    println!("Elfe with more food is: {}", total.iter().max().unwrap());
 }
 
 fn read_lines(filename: &str) -> Vec<String> {
